@@ -18,6 +18,20 @@ class KnightPathFinder
     @visited_positions = [start_pos]
   end
 
+  def find_path(end_pos)
+    trace_path_back(@move_tree.bfs(end_pos))
+  end
+
+  def trace_path_back(node)
+    path = [node]
+
+    until path.first.parent.nil?
+      path.unshift(path.first.parent)
+    end
+
+    path.map { |node| node.value }
+  end
+
   def build_move_tree
     @move_tree = PolyTreeNode.new(@start_pos)
 
@@ -61,6 +75,10 @@ class KnightPathFinder
 end
 
 if __FILE__ == $PROGRAM_NAME
+  start_time = Time.new
   k = KnightPathFinder.new([0,0])
   k.build_move_tree
+  p k.find_path([6,2])
+  end_time = Time.new
+  puts "#{end_time - start_time}"
 end
